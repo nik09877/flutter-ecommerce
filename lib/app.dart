@@ -1,6 +1,6 @@
+import 'package:e_mart/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:e_mart/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:e_mart/utils/constants/text_strings.dart';
 import 'package:e_mart/utils/theme/theme.dart';
 
