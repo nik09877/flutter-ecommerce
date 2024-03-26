@@ -46,7 +46,7 @@ class TTexts {
   static const String loginSubTitle =
       "Discover Limitless Choices and Unmatched Convenience.";
   static const String signupTitle = "Let’s create your account";
-  static const String forgetPasswordTitle = "Forget password";
+  static const String forgetPasswordTitle = "Forgot password";
   static const String forgetPasswordSubTitle =
       "Don’t worry sometimes people can forget too, enter your email and we will send you a password reset link.";
   static const String changeYourPasswordTitle = "Password Reset Email Sent";
@@ -68,4 +68,7 @@ class TTexts {
   // -- Home
   static const String homeAppbarTitle = "Good day for shopping";
   static const String homeAppbarSubTitle = "Nikhil Mishra";
+
+  //ERROR
+  static const String errorMsg = 'Something went wrong. Please try again.';
 }

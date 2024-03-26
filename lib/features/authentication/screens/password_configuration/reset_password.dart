@@ -1,16 +1,21 @@
+import 'package:e_mart/features/authentication/controllers/reset_password/reset_password_controller.dart';
 import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/constants/text_strings.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
+import 'package:e_mart/utils/validators/validation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ResetPassword extends StatelessWidget {
   const ResetPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ResetPasswordController());
+
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -44,19 +49,41 @@ class ResetPassword extends StatelessWidget {
                   textAlign: TextAlign.center),
 
               const SizedBox(height: TSizes.spaceBtwSections),
+              Obx(
+                () => Form(
+                  key: controller.passwordFormKey,
+                  child: TextFormField(
+                      validator: (value) => TValidator.validatePassword(value),
+                      controller: controller.password,
+                      obscureText: controller.showPassword.value,
+                      decoration: InputDecoration(
+                        labelText: TTexts.password,
+                        prefixIcon: const Icon(Iconsax.password_check),
+                        suffixIcon: IconButton(
+                            onPressed: () => controller.showPassword.value =
+                                !controller.showPassword.value,
+                            icon: Icon(controller.showPassword.value
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash)),
+                      )),
+                ),
+              ),
+
+              const SizedBox(height: TSizes.spaceBtwItems),
 
               //BUTTONS
               SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {}, child: const Text(TTexts.done))),
+                      onPressed: controller.updatePassword,
+                      child: const Text(TTexts.done))),
 
-              const SizedBox(height: TSizes.spaceBtwItems),
+              // const SizedBox(height: TSizes.spaceBtwItems),
 
-              SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                      onPressed: () {}, child: const Text(TTexts.resendEmail))),
+              // SizedBox(
+              //     width: double.infinity,
+              //     child: TextButton(
+              //         onPressed: () {}, child: const Text(TTexts.resendEmail))),
             ],
           ),
         )));

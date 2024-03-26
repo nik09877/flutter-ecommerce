@@ -3,6 +3,7 @@ import 'package:e_mart/common/widgets/custom_shapes/containers/primary_header_co
 import 'package:e_mart/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:e_mart/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/features/authentication/controllers/login/login_controller.dart';
 import 'package:e_mart/features/personalization/screens/address/address.dart';
 import 'package:e_mart/features/personalization/screens/profile/profile.dart';
 import 'package:e_mart/features/shop/screens/order/order.dart';
@@ -17,6 +18,8 @@ class SettingScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -46,7 +49,10 @@ class SettingScreens extends StatelessWidget {
                 child: Column(
                   children: [
                     //ACCOUNT SETTINGS
-                    const TSectionHeading(title: 'Account Settings'),
+                    const TSectionHeading(
+                      title: 'Account Settings',
+                      showActionButton: false,
+                    ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
                       icon: Iconsax.safe_home,
@@ -140,8 +146,9 @@ class SettingScreens extends StatelessWidget {
                     SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
-                            onPressed: () {}, child: const Text('Logout'))),
-                    const SizedBox(height: TSizes.spaceBtwSections * 2.5),
+                            onPressed: controller.logOut,
+                            child: const Text('Logout'))),
+                    const SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ))
           ],
