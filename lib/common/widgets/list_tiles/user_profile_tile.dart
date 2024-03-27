@@ -17,8 +17,15 @@ class TUserProfileTile extends StatelessWidget {
 
     return Obx(
       () => ListTile(
-        leading: const TCircularImage(
-            image: TImages.user, width: 50, height: 50, padding: 0),
+        leading: TCircularImage(
+            isNetworkImage:
+                controller.user.value.profilePicture!.isNotEmpty ? true : false,
+            image: controller.user.value.profilePicture!.isNotEmpty
+                ? controller.user.value.profilePicture!
+                : TImages.user,
+            width: 50,
+            height: 50,
+            padding: 0),
         title: Text(controller.user.value.fullName,
             style: Theme.of(context)
                 .textTheme

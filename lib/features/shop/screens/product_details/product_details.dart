@@ -8,6 +8,7 @@ import 'package:e_mart/common/widgets/text/brand_title_text_with_verified_icon.d
 import 'package:e_mart/common/widgets/text/product_title_text.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
 import 'package:e_mart/features/shop/controllers/cart_controller.dart';
+import 'package:e_mart/features/shop/controllers/review_controller.dart';
 import 'package:e_mart/features/shop/controllers/wishlist_controller.dart';
 import 'package:e_mart/features/shop/models/product_model.dart';
 import 'package:e_mart/features/shop/screens/cart/cart.dart';
@@ -18,6 +19,7 @@ import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
@@ -28,6 +30,7 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(CartController());
+    final reviewController = Get.put(ReviewController(productId: product.id!));
 
     return Scaffold(
         bottomNavigationBar: TBottomAddToCart(product: product),
@@ -82,13 +85,16 @@ class ProductDetailScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TSectionHeading(
-                        title: 'Reviews(${product.rating!.count})',
-                        showActionButton: false,
+                      Obx(
+                        () => TSectionHeading(
+                          title: 'Reviews(${reviewController.reviewCnt})',
+                          showActionButton: false,
+                        ),
                       ),
                       IconButton(
-                          onPressed: () =>
-                              Get.to(() => const ProductReviewsScreen()),
+                          onPressed: () => Get.to(() => ProductReviewsScreen(
+                                productId: product.id!,
+                              )),
                           icon: const Icon(Iconsax.arrow_right_3, size: 18))
                     ],
                   ),

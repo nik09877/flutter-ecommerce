@@ -1,4 +1,6 @@
+import 'package:e_mart/common/widgets/loaders/circular_loader.dart';
 import 'package:e_mart/common/widgets/success_screen/success_screen.dart';
+import 'package:e_mart/features/shop/controllers/order_controller.dart';
 import 'package:e_mart/features/shop/controllers/product_controller.dart';
 import 'package:e_mart/features/shop/models/cart_item_model.dart';
 import 'package:e_mart/features/shop/models/product_model.dart';
@@ -19,6 +21,7 @@ class CartController extends GetxController {
   //variables
   final productController = Get.put(ProductController());
   final userId = supabase.auth.currentUser!.id;
+  final orderController = Get.put(OrderController());
 
   @override
   void onInit() {
@@ -122,10 +125,15 @@ class CartController extends GetxController {
 
   Future checkout() async {
     try {
+      //Start Loading
+      TFullScreenLoader.openLoadingDialog(
+          'We are processing your order', TImages.docerAnimation);
+      await orderController.createOrder(cartTotalPrice.value);
       cart([]);
       calcCartCnt();
       calcCartPrice();
       await supabase.from('Cart').delete().match({'userId': userId});
+      TFullScreenLoader.stopLoadind();
       Get.to(() => SuccessScreen(
           image: TImages.successfulPaymentIcon,
           title: 'Payment Success!',
