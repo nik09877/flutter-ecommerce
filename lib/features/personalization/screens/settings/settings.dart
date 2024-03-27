@@ -6,6 +6,7 @@ import 'package:e_mart/common/widgets/text/section_heading.dart';
 import 'package:e_mart/features/authentication/controllers/login/login_controller.dart';
 import 'package:e_mart/features/personalization/screens/address/address.dart';
 import 'package:e_mart/features/personalization/screens/profile/profile.dart';
+import 'package:e_mart/features/shop/screens/cart/cart.dart';
 import 'package:e_mart/features/shop/screens/order/order.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
@@ -64,7 +65,7 @@ class SettingScreens extends StatelessWidget {
                       icon: Iconsax.shopping_cart,
                       title: 'My Cart',
                       subTitle: 'Add, remove products and move to checkout',
-                      onTap: () {},
+                      onTap: () => Get.to(() => const CartScreen()),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.bag_tick,

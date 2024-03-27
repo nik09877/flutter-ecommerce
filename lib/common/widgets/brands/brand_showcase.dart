@@ -1,5 +1,6 @@
 import 'package:e_mart/common/widgets/brands/brand_card.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/rounded_container.dart';
+import 'package:e_mart/dummy_data.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
@@ -9,8 +10,9 @@ class TBrandShowCase extends StatelessWidget {
   const TBrandShowCase({
     super.key,
     required this.images,
+    this.title = "Puma",
   });
-
+  final String title;
   final List<String> images;
 
   @override
@@ -23,7 +25,13 @@ class TBrandShowCase extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
         child: Column(
           children: [
-            const TBrandCard(showBorder: false),
+            TBrandCard(
+              showBorder: false,
+              title: title,
+              // title: dummyBrands[0]["name"],
+              image: dummyBrands[0]["image"],
+              prodCount: dummyBrands[0]["count"],
+            ),
             const SizedBox(height: TSizes.spaceBtwItems),
             Row(
                 children: images

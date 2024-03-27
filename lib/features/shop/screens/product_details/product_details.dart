@@ -3,16 +3,17 @@ import 'package:e_mart/common/widgets/chips/choice_chip.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:e_mart/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
 import 'package:e_mart/common/widgets/icons/circular_icon.dart';
-import 'package:e_mart/common/widgets/images/circular_image.dart';
-import 'package:e_mart/common/widgets/images/rounded_image.dart';
 import 'package:e_mart/common/widgets/product_cards/product_card_vertical.dart';
 import 'package:e_mart/common/widgets/text/brand_title_text_with_verified_icon.dart';
 import 'package:e_mart/common/widgets/text/product_title_text.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/features/shop/controllers/cart_controller.dart';
+import 'package:e_mart/features/shop/controllers/wishlist_controller.dart';
+import 'package:e_mart/features/shop/models/product_model.dart';
+import 'package:e_mart/features/shop/screens/cart/cart.dart';
 import 'package:e_mart/features/shop/screens/product_reviews/product_reviews.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/enums.dart';
-import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -21,17 +22,20 @@ import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
+  const ProductDetailScreen({super.key, required this.product});
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.put(CartController());
+
     return Scaffold(
-        bottomNavigationBar: const TBottomAddToCart(),
+        bottomNavigationBar: TBottomAddToCart(product: product),
         body: SingleChildScrollView(
             child: Column(
           children: [
             /// 1 - Product Image Slider
-            const TProductImageSlider(),
+            TProductImageSlider(image: (product.image)!, product: product),
 
             /// 2 - Product Details
             Padding(
@@ -41,45 +45,45 @@ class ProductDetailScreen extends StatelessWidget {
                     bottom: TSizes.defaultSpace),
                 child: Column(children: [
                   /// Rating & Share Button
-                  const TRatingAndShare(),
+                  TRatingAndShare(
+                    rating: product.rating!.rate ?? 5.0,
+                    reviews: product.rating!.count ?? 200,
+                  ),
 
                   //PRICE TITLE STOCK BRAND
-                  const TProductMetaData(),
+                  TProductMetaData(product: product),
 
                   //Attributes
-                  const TProductAttributes(),
-                  const SizedBox(height: TSizes.spaceBtwSections),
-
-                  //Checkout Button
-                  SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text('Checkout'))),
+                  // const TProductAttributes(),
                   const SizedBox(height: TSizes.spaceBtwSections),
 
                   //Description
-                  const TSectionHeading(title: 'Description'),
+                  const TSectionHeading(
+                    title: 'Description',
+                    showActionButton: false,
+                  ),
                   const SizedBox(height: TSizes.spaceBtwItems),
-                  const ReadMoreText(
-                    'This is a Product description for Blue Nike Sleeve vest. There are more things that can be added but I am only adding this in the description',
+                  ReadMoreText(
+                    product.description ?? "",
                     trimLines: 2,
                     trimMode: TrimMode.Line,
                     trimCollapsedText: ' Show more',
                     trimExpandedText: ' Less',
-                    moreStyle:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                    lessStyle:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                    moreStyle: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w800),
+                    lessStyle: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w800),
                   ),
+                  const SizedBox(height: TSizes.spaceBtwItems),
 
                   //Reviews
                   const Divider(),
-                  const SizedBox(height: TSizes.spaceBtwItems),
+                  // const SizedBox(height: TSizes.spaceBtwItems / 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TSectionHeading(
-                        title: 'Reviews(190)',
+                      TSectionHeading(
+                        title: 'Reviews(${product.rating!.count})',
                         showActionButton: false,
                       ),
                       IconButton(
@@ -88,7 +92,15 @@ class ProductDetailScreen extends StatelessWidget {
                           icon: const Icon(Iconsax.arrow_right_3, size: 18))
                     ],
                   ),
-                  const SizedBox(height: TSizes.spaceBtwSections),
+                  const SizedBox(height: TSizes.spaceBtwItems),
+
+                  //Checkout Button
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () => cartController.addToCart(product),
+                          child: const Text('Add to cart'))),
+                  // const SizedBox(height: TSizes.spaceBtwSections),
                 ]))
           ],
         )));
@@ -96,11 +108,13 @@ class ProductDetailScreen extends StatelessWidget {
 }
 
 class TBottomAddToCart extends StatelessWidget {
-  const TBottomAddToCart({super.key});
-
+  const TBottomAddToCart({super.key, required this.product});
+  final ProductModel product;
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final cartController = Get.put(CartController());
+
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace / 2),
@@ -115,33 +129,37 @@ class TBottomAddToCart extends StatelessWidget {
         children: [
           Row(
             children: [
-              const TCircularIcon(
+              TCircularIcon(
                 icon: Iconsax.minus,
                 backgroundColor: TColors.darkGrey,
                 width: 40,
                 height: 40,
                 color: TColors.white,
+                onPressed: () => cartController.removeFromCart(product),
               ),
               const SizedBox(width: TSizes.spaceBtwItems),
-              Text('2', style: Theme.of(context).textTheme.titleSmall),
+              Obx(() => Text(
+                  '${cartController.cartCount.value != -1 ? cartController.productCountInCart(product.id!) : 0}',
+                  style: Theme.of(context).textTheme.titleSmall)),
               const SizedBox(width: TSizes.spaceBtwItems),
-              const TCircularIcon(
+              TCircularIcon(
                 icon: Iconsax.add,
                 backgroundColor: TColors.black,
                 width: 40,
                 height: 40,
                 color: TColors.white,
+                onPressed: () => cartController.addToCart(product),
               ),
             ],
           ),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Get.to(() => const CartScreen()),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(TSizes.md),
                 backgroundColor: TColors.black,
                 side: const BorderSide(color: TColors.black),
               ),
-              child: const Text('Add to Cart'))
+              child: const Text('Go to Cart'))
         ],
       ), // Row
     ); // Container
@@ -278,11 +296,12 @@ class TProductAttributes extends StatelessWidget {
 }
 
 class TProductMetaData extends StatelessWidget {
-  const TProductMetaData({super.key});
+  const TProductMetaData({super.key, required this.product});
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
+    // final dark = THelperFunctions.isDarkMode(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -304,19 +323,19 @@ class TProductMetaData extends StatelessWidget {
             const SizedBox(width: TSizes.spaceBtwItems),
 
             /// Price
-            Text('\$250',
+            Text('₹${product.price! + 300}',
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
                     .apply(decoration: TextDecoration.lineThrough)),
             const SizedBox(width: TSizes.spaceBtwItems),
-            const TProductPriceText(price: '175', isLarge: true),
+            TProductPriceText(price: '${product.price}', isLarge: true),
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 
         /// Title
-        const TProductTitleText(title: 'Green Nike Sports Shirt'),
+        TProductTitleText(title: product.title ?? " "),
         const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 
         /// Stock Status
@@ -332,14 +351,15 @@ class TProductMetaData extends StatelessWidget {
         /// Brand
         Row(
           children: [
-            TCircularImage(
-              image: TImages.shoeIcon,
-              width: 32,
-              height: 32,
-              overlayColor: dark ? TColors.white : TColors.black,
-            ),
-            const TBrandTitleWithVerifiedIcon(
-              title: 'Nike',
+            // TCircularImage(
+            //   padding: 4,
+            //   image: TImages.clothIcon,
+            //   width: 32,
+            //   height: 32,
+            //   overlayColor: dark ? TColors.white : TColors.black,
+            // ),
+            TBrandTitleWithVerifiedIcon(
+              title: product.category ?? "",
               brandTextSize: TextSizes.medium,
             ),
           ],
@@ -352,8 +372,11 @@ class TProductMetaData extends StatelessWidget {
 class TRatingAndShare extends StatelessWidget {
   const TRatingAndShare({
     super.key,
+    required this.rating,
+    required this.reviews,
   });
-
+  final double rating;
+  final int reviews;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -366,8 +389,9 @@ class TRatingAndShare extends StatelessWidget {
             const SizedBox(width: TSizes.spaceBtwItems / 2),
             Text.rich(TextSpan(children: [
               TextSpan(
-                  text: '5.0', style: Theme.of(context).textTheme.bodyLarge),
-              const TextSpan(text: '(199)'),
+                  text: rating.toString(),
+                  style: Theme.of(context).textTheme.bodyLarge),
+              TextSpan(text: '($reviews)'),
             ]) // TextSpan
                 ) // Text.rich
           ],
@@ -384,11 +408,15 @@ class TRatingAndShare extends StatelessWidget {
 class TProductImageSlider extends StatelessWidget {
   const TProductImageSlider({
     super.key,
+    required this.image,
+    required this.product,
   });
-
+  final String image;
+  final ProductModel product;
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final wishlistController = Get.put(WishlistController());
 
     return TCurvedEdgeWidget(
       child: Container(
@@ -396,43 +424,58 @@ class TProductImageSlider extends StatelessWidget {
         child: Stack(
           children: [
             /// Main Large Image
-            const SizedBox(
+            SizedBox(
               height: 400,
               child: Padding(
-                padding: EdgeInsets.all(TSizes.productImageRadius * 2),
-                child: Center(
-                    child: Image(image: AssetImage(TImages.productImage5))),
+                padding: const EdgeInsets.all(TSizes.productImageRadius * 2),
+                child: Center(child: Image(image: NetworkImage(image))),
               ),
             ),
 
             /// Image Slider
-            Positioned(
-              right: 0,
-              bottom: 30,
-              child: SizedBox(
-                height: 80,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: 4,
-                  separatorBuilder: (_, __) =>
-                      const SizedBox(width: TSizes.spaceBtwItems),
-                  itemBuilder: (_, index) => TRoundedImage(
-                    width: 80,
-                    backgroundColor: dark ? TColors.dark : TColors.white,
-                    border: Border.all(color: TColors.primary),
-                    padding: const EdgeInsets.all(TSizes.sm),
-                    imageUrl: TImages.productImage3,
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   right: 0,
+            //   bottom: 30,
+            //   child: SizedBox(
+            //     height: 80,
+            //     child: ListView.separated(
+            //       shrinkWrap: true,
+            //       scrollDirection: Axis.horizontal,
+            //       physics: const AlwaysScrollableScrollPhysics(),
+            //       itemCount: 4,
+            //       separatorBuilder: (_, __) =>
+            //           const SizedBox(width: TSizes.spaceBtwItems),
+            //       itemBuilder: (_, index) => TRoundedImage(
+            //         width: 80,
+            //         backgroundColor: dark ? TColors.dark : TColors.white,
+            //         border: Border.all(color: TColors.primary),
+            //         padding: const EdgeInsets.all(TSizes.sm),
+            //         imageUrl: TImages.productImage3,
+            //       ),
+            //     ),
+            //   ),
+            // ),
 
             /// Appbar Icons
-            const TAppBar(
+            TAppBar(
               showBackArrow: true,
-              actions: [TCircularIcon(icon: Iconsax.heart5, color: Colors.red)],
+              actions: [
+                Obx(
+                  () => TCircularIcon(
+                    icon: Iconsax.heart5,
+                    color: wishlistController.productInWishlist(product.id!)
+                        ? Colors.red
+                        : null,
+                    onPressed: () {
+                      if (wishlistController.productInWishlist(product.id!)) {
+                        wishlistController.removeFromWishlist(product);
+                      } else {
+                        wishlistController.addToWishlist(product);
+                      }
+                    },
+                  ),
+                )
+              ],
             )
             // TAppBar
           ],

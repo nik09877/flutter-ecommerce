@@ -2,6 +2,7 @@ import 'package:e_mart/common/widgets/appbar/appbar.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:e_mart/common/widgets/success_screen/success_screen.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/features/shop/controllers/cart_controller.dart';
 import 'package:e_mart/features/shop/screens/cart/cart.dart';
 import 'package:e_mart/navigation_menu.dart';
 import 'package:e_mart/utils/constants/colors.dart';
@@ -17,6 +18,8 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.put(CartController());
+
     final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: TAppBar(
@@ -73,7 +76,8 @@ class CheckoutScreen extends StatelessWidget {
                 title: 'Payment Success!',
                 subTitle: 'Your item will be shipped soon!',
                 onPressed: () => Get.offAll(() => const NavigationMenu()))),
-            child: const Text('Checkout \$256.0')),
+            child: Obx(() => Text(
+                'Checkout ₹${cartController.cartTotalPrice.toStringAsFixed(2)}'))),
       ),
     );
   }
@@ -84,19 +88,21 @@ class TBillingAmountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.put(CartController());
     return Column(
       children: [
         //SubTotal
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium),
-          Text('\$256', style: Theme.of(context).textTheme.bodyMedium),
+          Obx(() => Text('₹${cartController.cartTotalPrice.toStringAsFixed(2)}',
+              style: Theme.of(context).textTheme.bodyMedium)),
         ]),
         const SizedBox(height: TSizes.spaceBtwItems / 2),
 
         //Shipping Fee
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Shipping Fee', style: Theme.of(context).textTheme.bodyMedium),
-          Text('\$6.0', style: Theme.of(context).textTheme.labelLarge),
+          Text('₹50.0', style: Theme.of(context).textTheme.labelLarge),
         ]),
 
         const SizedBox(height: TSizes.spaceBtwItems / 2),
@@ -104,15 +110,22 @@ class TBillingAmountSection extends StatelessWidget {
         //Tax Fee
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Tax Fee', style: Theme.of(context).textTheme.bodyMedium),
-          Text('\$6.0', style: Theme.of(context).textTheme.labelLarge),
+          Text('₹60.0', style: Theme.of(context).textTheme.labelLarge),
         ]),
 
         const SizedBox(height: TSizes.spaceBtwItems / 2),
 
         //Order Total
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Shipping Fee', style: Theme.of(context).textTheme.bodyMedium),
-          Text('\$6.0', style: Theme.of(context).textTheme.titleMedium),
+          Text('Order Total',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(decoration: TextDecoration.lineThrough)),
+          Obx(
+            () => Text('₹${cartController.cartTotalPrice.toStringAsFixed(2)}',
+                style: Theme.of(context).textTheme.titleMedium),
+          ),
         ]),
       ],
     );

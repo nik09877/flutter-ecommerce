@@ -7,10 +7,11 @@ import 'package:e_mart/common/widgets/images/rounded_image.dart';
 import 'package:e_mart/common/widgets/layouts/grid_layout.dart';
 import 'package:e_mart/common/widgets/product_cards/product_card_vertical.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/dummy_data.dart';
 import 'package:e_mart/features/shop/controllers/home_controller.dart';
+import 'package:e_mart/features/shop/controllers/product_controller.dart';
 import 'package:e_mart/features/shop/screens/all_products/all_products.dart';
 import 'package:e_mart/features/shop/screens/home/widgets/home_appbar.dart';
-import 'package:e_mart/features/shop/screens/sub_category/sub_category.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
@@ -22,6 +23,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productController = Get.put(ProductController());
+    // Get.put(CartController());
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -51,14 +55,17 @@ class HomeScreen extends StatelessWidget {
                           height: 80,
                           child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: 6,
+                              itemCount: dummyCategories.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (_, index) {
                                 return TVerticalImageText(
-                                  image: TImages.shoeIcon,
-                                  title: 'Shoes',
+                                  image: dummyCategories[index]["image"],
+                                  title: dummyCategories[index]["name"],
                                   onTap: () =>
-                                      Get.to(() => const SubCategoriesScreen()),
+                                      Get.to(() => const AllProducts()),
+
+                                  // onTap: () =>
+                                  //     Get.to(() => const SubCategoriesScreen()),
                                 );
                               }),
                         )
@@ -72,25 +79,31 @@ class HomeScreen extends StatelessWidget {
             ),
 
             //BODY
-            Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                children: [
-                  const TPromoSlider(),
-                  const SizedBox(height: TSizes.spaceBtwSections),
+            Obx(
+              () => Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: Column(
+                  children: [
+                    const TPromoSlider(),
+                    const SizedBox(height: TSizes.spaceBtwSections),
 
-                  //HEADING
-                  TSectionHeading(
-                    title: 'Popular Products',
-                    onPressed: () => Get.to(() => const AllProducts()),
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems),
-                  //LAYOUT
-                  TGridLayout(
-                    itemCount: 2,
-                    itemBuilder: (_, index) => const TProductCardVertical(),
-                  ),
-                ],
+                    //HEADING
+                    TSectionHeading(
+                      title: 'Popular Products',
+                      onPressed: () => Get.to(() => const AllProducts()),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    //LAYOUT
+
+                    TGridLayout(
+                      itemCount: productController.products.length < 4
+                          ? productController.products.length
+                          : productController.products.sublist(0, 4).length,
+                      itemBuilder: (_, index) => TProductCardVertical(
+                          product: productController.products[index]),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -111,16 +124,19 @@ class TPromoSlider extends StatelessWidget {
 
     return Column(
       children: [
-        CarouselSlider(
-          items: const [
-            TRoundedImage(imageUrl: TImages.promoBanner1),
-            TRoundedImage(imageUrl: TImages.promoBanner2),
-            TRoundedImage(imageUrl: TImages.promoBanner3),
-          ],
-          options: CarouselOptions(
-              viewportFraction: 1,
-              onPageChanged: (index, _) =>
-                  controller.updatePageIndicator(index)),
+        GestureDetector(
+          onTap: () => Get.to(() => const AllProducts()),
+          child: CarouselSlider(
+            items: const [
+              TRoundedImage(imageUrl: TImages.promoBanner1),
+              TRoundedImage(imageUrl: TImages.promoBanner2),
+              TRoundedImage(imageUrl: TImages.promoBanner3),
+            ],
+            options: CarouselOptions(
+                viewportFraction: 1,
+                onPageChanged: (index, _) =>
+                    controller.updatePageIndicator(index)),
+          ),
         ),
         const SizedBox(
           height: TSizes.spaceBtwItems,

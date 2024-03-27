@@ -3,7 +3,6 @@ import 'package:e_mart/common/widgets/images/circular_image.dart';
 import 'package:e_mart/common/widgets/text/brand_title_text_with_verified_icon.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/enums.dart';
-import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +12,14 @@ class TBrandCard extends StatelessWidget {
     super.key,
     required this.showBorder,
     this.onTap,
+    required this.image,
+    required this.title,
+    required this.prodCount,
   });
 
   final bool showBorder;
   final VoidCallback? onTap;
+  final String image, title, prodCount;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class TBrandCard extends StatelessWidget {
             Flexible(
               child: TCircularImage(
                 isNetworkImage: false,
-                image: TImages.clothIcon,
+                image: image,
                 backgroundColor: Colors.transparent,
                 overlayColor: THelperFunctions.isDarkMode(context)
                     ? TColors.white
@@ -47,11 +50,11 @@ class TBrandCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TBrandTitleWithVerifiedIcon(
-                  title: 'Nike',
+                TBrandTitleWithVerifiedIcon(
+                  title: title,
                   brandTextSize: TextSizes.large,
                 ),
-                Text('256 products',
+                Text('$prodCount products',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelMedium)
               ],

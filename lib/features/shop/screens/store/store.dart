@@ -5,11 +5,16 @@ import 'package:e_mart/common/widgets/custom_shapes/containers/search_container.
 import 'package:e_mart/common/widgets/layouts/grid_layout.dart';
 import 'package:e_mart/common/widgets/products/cart/cart_menu_icon.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/dummy_data.dart';
+import 'package:e_mart/features/shop/screens/all_products/all_products.dart';
+import 'package:e_mart/features/shop/screens/brand/all_brands.dart';
+import 'package:e_mart/features/shop/screens/cart/cart.dart';
 import 'package:e_mart/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -24,7 +29,7 @@ class StoreScreen extends StatelessWidget {
               Text("Store", style: Theme.of(context).textTheme.headlineMedium),
           actions: [
             TCartCounterIcon(
-              onPressed: () {},
+              onPressed: () => Get.to(() => const CartScreen()),
             )
           ],
         ),
@@ -58,15 +63,23 @@ class StoreScreen extends StatelessWidget {
                             //FEATURED BRANDS
                             TSectionHeading(
                               title: 'Featured Brands',
-                              onPressed: () {},
+                              onPressed: () =>
+                                  Get.to(() => const AllBrandsScreen()),
                             ),
                             const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 
                             TGridLayout(
-                                itemCount: 4,
+                                itemCount: dummyBrands.length,
                                 mainAxisExtent: 80,
                                 itemBuilder: (_, index) {
-                                  return const TBrandCard(showBorder: false);
+                                  return TBrandCard(
+                                    showBorder: false,
+                                    title: dummyBrands[index]["name"],
+                                    image: dummyBrands[index]["image"],
+                                    prodCount: dummyBrands[index]["count"],
+                                    onTap: () =>
+                                        Get.to(() => const AllProducts()),
+                                  );
                                 })
                           ],
                         )),
@@ -84,7 +97,12 @@ class StoreScreen extends StatelessWidget {
               ];
             },
             body: TabBarView(
-                children: [for (int i = 0; i < 5; i++) const CategoryTab()])),
+                children: dummyCategories
+                    .sublist(0, 5)
+                    .map((item) => CategoryTab(
+                          title: item["name"],
+                        ))
+                    .toList())),
       ),
     );
   }

@@ -1,5 +1,7 @@
+import 'package:e_mart/features/shop/controllers/cart_controller.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TCartCounterIcon extends StatelessWidget {
@@ -10,6 +12,8 @@ class TCartCounterIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.put(CartController());
+
     return Stack(
       children: [
         IconButton(
@@ -23,12 +27,14 @@ class TCartCounterIcon extends StatelessWidget {
             decoration: BoxDecoration(
                 color: TColors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(18)),
-            child: Text(
-              '2',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelLarge!.apply(
-                    color: TColors.white,
-                  ),
+            child: Obx(
+              () => Text(
+                '${cartController.cartCount}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelLarge!.apply(
+                      color: TColors.white,
+                    ),
+              ),
             ),
           ),
         )

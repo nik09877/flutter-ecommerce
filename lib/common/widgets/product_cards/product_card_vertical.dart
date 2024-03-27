@@ -4,6 +4,9 @@ import 'package:e_mart/common/widgets/icons/circular_icon.dart';
 import 'package:e_mart/common/widgets/images/rounded_image.dart';
 import 'package:e_mart/common/widgets/text/brand_title_text_with_verified_icon.dart';
 import 'package:e_mart/common/widgets/text/product_title_text.dart';
+import 'package:e_mart/features/shop/controllers/cart_controller.dart';
+import 'package:e_mart/features/shop/controllers/wishlist_controller.dart';
+import 'package:e_mart/features/shop/models/product_model.dart';
 import 'package:e_mart/features/shop/screens/product_details/product_details.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/image_strings.dart';
@@ -14,14 +17,17 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical({super.key});
+  const TProductCardVertical({super.key, required this.product});
 
+  final ProductModel product;
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final wishlistController = Get.put(WishlistController());
+    final cartController = Get.put(CartController());
 
     return GestureDetector(
-      onTap: () => Get.to(() => const ProductDetailScreen()),
+      onTap: () => Get.to(() => ProductDetailScreen(product: product)),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -34,32 +40,51 @@ class TProductCardVertical extends StatelessWidget {
             // BANNER, BUTTONS
             TRoundedContainer(
               height: 180,
+              width: double.infinity,
               padding: const EdgeInsets.all(TSizes.sm),
+              // padding: const EdgeInsets.all(1),
               backgroundColor: dark ? TColors.dark : TColors.light,
               child: Stack(
                 children: [
-                  const TRoundedImage(
-                    imageUrl: TImages.productImage1,
+                  TRoundedImage(
+                    imageUrl: product.image ?? TImages.productImage1,
                     applyImageRadius: true,
+                    isNetworkImage: true,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
-                  Positioned(
-                    top: 12,
-                    child: TRoundedContainer(
-                        radius: TSizes.sm,
-                        backgroundColor: TColors.secondary.withOpacity(0.8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: TSizes.sm, vertical: TSizes.xs),
-                        child: Text('25%',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .apply(color: TColors.black))),
-                  ),
-                  const Positioned(
-                    right: 0,
-                    top: 0,
-                    child:
-                        TCircularIcon(icon: Iconsax.heart5, color: Colors.red),
+                  // Positioned(
+                  //   top: 12,
+                  //   child: TRoundedContainer(
+                  //       radius: TSizes.sm,
+                  //       backgroundColor: TColors.secondary.withOpacity(0.8),
+                  //       padding: const EdgeInsets.symmetric(
+                  //           horizontal: TSizes.sm, vertical: TSizes.xs),
+                  //       child: Text('25%',
+                  //           style: Theme.of(context)
+                  //               .textTheme
+                  //               .labelLarge!
+                  //               .apply(color: TColors.black))),
+                  // ),
+                  Obx(
+                    () => Positioned(
+                      right: 0,
+                      top: 0,
+                      child: TCircularIcon(
+                        icon: Iconsax.heart5,
+                        color: wishlistController.productInWishlist(product.id!)
+                            ? Colors.red
+                            : null,
+                        onPressed: () {
+                          if (wishlistController
+                              .productInWishlist(product.id!)) {
+                            wishlistController.removeFromWishlist(product);
+                          } else {
+                            wishlistController.addToWishlist(product);
+                          }
+                        },
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -68,20 +93,20 @@ class TProductCardVertical extends StatelessWidget {
               height: TSizes.spaceBtwItems / 2,
             ),
             //DETAILS
-            const Padding(
-              padding: EdgeInsets.only(left: TSizes.sm),
+            Padding(
+              padding: const EdgeInsets.only(left: TSizes.sm),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TProductTitleText(
-                    title: 'Green Nike Air Shoes',
+                    title: product.title ?? "",
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: TSizes.spaceBtwItems / 2,
                   ),
                   TBrandTitleWithVerifiedIcon(
-                    title: 'Nike',
+                    title: product.category ?? "",
                   ),
                 ],
               ),
@@ -91,9 +116,10 @@ class TProductCardVertical extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: TSizes.sm),
-                  child: TProductPriceText(price: '35.0', isLarge: false),
+                Padding(
+                  padding: const EdgeInsets.only(left: TSizes.sm),
+                  child: TProductPriceText(
+                      price: product.price.toString(), isLarge: false),
                 ),
                 Container(
                     decoration: const BoxDecoration(
@@ -102,11 +128,15 @@ class TProductCardVertical extends StatelessWidget {
                             topLeft: Radius.circular(TSizes.cardRadiusMd),
                             bottomRight:
                                 Radius.circular(TSizes.productImageRadius))),
-                    child: const SizedBox(
+                    child: SizedBox(
                         width: TSizes.iconLg * 1.2,
                         height: TSizes.iconLg * 1.2,
                         child: Center(
-                            child: Icon(Iconsax.add, color: TColors.white))))
+                            child: IconButton(
+                                onPressed: () =>
+                                    cartController.addToCart(product),
+                                icon: const Icon(Iconsax.add),
+                                color: TColors.white))))
               ],
             )
           ],
@@ -119,7 +149,7 @@ class TProductCardVertical extends StatelessWidget {
 class TProductPriceText extends StatelessWidget {
   const TProductPriceText({
     super.key,
-    this.currencySign = '\$',
+    this.currencySign = '₹',
     required this.price,
     this.maxLines = 1,
     this.isLarge = false,
