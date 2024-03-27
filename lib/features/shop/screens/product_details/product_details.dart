@@ -391,7 +391,7 @@ class TRatingAndShare extends StatelessWidget {
               TextSpan(
                   text: rating.toString(),
                   style: Theme.of(context).textTheme.bodyLarge),
-              TextSpan(text: '($reviews)'),
+              // TextSpan(text: '($reviews)'),
             ]) // TextSpan
                 ) // Text.rich
           ],

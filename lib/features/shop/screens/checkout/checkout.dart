@@ -1,17 +1,14 @@
 import 'package:e_mart/common/widgets/appbar/appbar.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/rounded_container.dart';
-import 'package:e_mart/common/widgets/success_screen/success_screen.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
 import 'package:e_mart/features/shop/controllers/cart_controller.dart';
 import 'package:e_mart/features/shop/screens/cart/cart.dart';
-import 'package:e_mart/navigation_menu.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({super.key});
@@ -71,11 +68,7 @@ class CheckoutScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
-            onPressed: () => Get.to(() => SuccessScreen(
-                image: TImages.successfulPaymentIcon,
-                title: 'Payment Success!',
-                subTitle: 'Your item will be shipped soon!',
-                onPressed: () => Get.offAll(() => const NavigationMenu()))),
+            onPressed: cartController.checkout,
             child: Obx(() => Text(
                 'Checkout ₹${cartController.cartTotalPrice.toStringAsFixed(2)}'))),
       ),
@@ -102,7 +95,11 @@ class TBillingAmountSection extends StatelessWidget {
         //Shipping Fee
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Shipping Fee', style: Theme.of(context).textTheme.bodyMedium),
-          Text('₹50.0', style: Theme.of(context).textTheme.labelLarge),
+          Text('₹50.0',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(decoration: TextDecoration.lineThrough)),
         ]),
 
         const SizedBox(height: TSizes.spaceBtwItems / 2),
@@ -110,18 +107,18 @@ class TBillingAmountSection extends StatelessWidget {
         //Tax Fee
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Tax Fee', style: Theme.of(context).textTheme.bodyMedium),
-          Text('₹60.0', style: Theme.of(context).textTheme.labelLarge),
+          Text('₹60.0',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(decoration: TextDecoration.lineThrough)),
         ]),
 
         const SizedBox(height: TSizes.spaceBtwItems / 2),
 
         //Order Total
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Order Total',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(decoration: TextDecoration.lineThrough)),
+          Text('Order Total', style: Theme.of(context).textTheme.bodyMedium),
           Obx(
             () => Text('₹${cartController.cartTotalPrice.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.titleMedium),

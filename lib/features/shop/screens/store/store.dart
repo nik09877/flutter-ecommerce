@@ -52,11 +52,12 @@ class StoreScreen extends StatelessWidget {
                           children: [
                             //SEARCH BAR
                             const SizedBox(height: TSizes.spaceBtwItems),
-                            const TSearchContainer(
+                            TSearchContainer(
                               text: 'Search in Store',
                               showBorder: true,
                               showBackground: false,
                               padding: EdgeInsets.zero,
+                              onTap: () => Get.to(() => const AllProducts()),
                             ),
                             const SizedBox(height: TSizes.spaceBtwSections),
 

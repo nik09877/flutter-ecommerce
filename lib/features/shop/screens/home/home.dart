@@ -38,7 +38,10 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: TSizes.spaceBtwSections),
 
                 //SEARCH BAR
-                const TSearchContainer(text: 'Search in Store'),
+                TSearchContainer(
+                  text: 'Search in Store',
+                  onTap: () => Get.to(() => const AllProducts()),
+                ),
                 const SizedBox(height: TSizes.spaceBtwSections),
 
                 //CUSTOM HEADING and LISTVIEW

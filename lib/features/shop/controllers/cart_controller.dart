@@ -1,7 +1,10 @@
+import 'package:e_mart/common/widgets/success_screen/success_screen.dart';
 import 'package:e_mart/features/shop/controllers/product_controller.dart';
 import 'package:e_mart/features/shop/models/cart_item_model.dart';
 import 'package:e_mart/features/shop/models/product_model.dart';
 import 'package:e_mart/main.dart';
+import 'package:e_mart/navigation_menu.dart';
+import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/popups/loaders.dart';
 import 'package:get/get.dart';
 
@@ -115,5 +118,21 @@ class CartController extends GetxController {
       }
     }
     return cnt;
+  }
+
+  Future checkout() async {
+    try {
+      cart([]);
+      calcCartCnt();
+      calcCartPrice();
+      await supabase.from('Cart').delete().match({'userId': userId});
+      Get.to(() => SuccessScreen(
+          image: TImages.successfulPaymentIcon,
+          title: 'Payment Success!',
+          subTitle: 'Your item will be shipped soon!',
+          onPressed: () => Get.offAll(() => const NavigationMenu())));
+    } catch (e) {
+      TLoaders.errorSnackBar(title: "Oh Snap!", message: e.toString());
+    }
   }
 }
