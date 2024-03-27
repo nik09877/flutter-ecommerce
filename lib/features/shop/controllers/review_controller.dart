@@ -63,12 +63,11 @@ class ReviewController extends GetxController {
         "profileImage": userController.user.value.profilePicture,
         "productId": productId,
         "date": TFormatter.formatDate(DateTime.now()),
-        "id": -1
       };
-      await supabase.from('Reviews').insert(json);
-      reviews.insert(0, ReviewModel.fromJson(json));
+      final List<Map<String, dynamic>> data =
+          await supabase.from('Reviews').insert(json).select();
+      reviews.insert(0, ReviewModel.fromJson(data[0]));
       calcReviewCnt();
-      json.remove("id");
 
       //Show Success Message
       TFullScreenLoader.stopLoadind();

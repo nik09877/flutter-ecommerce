@@ -108,6 +108,7 @@ class UserReviewCard extends StatelessWidget {
         : const AssetImage(TImages.user) as ImageProvider;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
