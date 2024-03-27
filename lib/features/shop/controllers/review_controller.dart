@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class ReviewController extends GetxController {
   static ReviewController get instance => Get.find();
 
-  ReviewController({required this.productId});
+  // ReviewController({required this.productId});
 
   //observables
   RxList<ReviewModel> reviews = <ReviewModel>[].obs;
@@ -22,16 +22,16 @@ class ReviewController extends GetxController {
   final userController = Get.put(UserController());
   final review = TextEditingController();
   GlobalKey<FormState> reviewFormKey = GlobalKey<FormState>();
-  final int productId;
+  // final int productId;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Fetch reviews for the given product ID
-    getAllReviews();
-  }
+  // @override
+  // void onInit() {
+  // super.onInit();
+  // Fetch reviews for the given product ID
+  // getAllReviews();
+  // }
 
-  Future getAllReviews() async {
+  Future getAllReviews(int productId) async {
     try {
       final data =
           await supabase.from('Reviews').select().eq('productId', productId);

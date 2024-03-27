@@ -19,7 +19,6 @@ import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
@@ -30,7 +29,8 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(CartController());
-    final reviewController = Get.put(ReviewController(productId: product.id!));
+    final reviewController = Get.put(ReviewController());
+    reviewController.getAllReviews(product.id!);
 
     return Scaffold(
         bottomNavigationBar: TBottomAddToCart(product: product),

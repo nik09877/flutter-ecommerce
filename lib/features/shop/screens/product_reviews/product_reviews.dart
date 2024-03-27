@@ -16,7 +16,9 @@ class ProductReviewsScreen extends StatelessWidget {
   final int productId;
   @override
   Widget build(BuildContext context) {
-    final reviewController = Get.put(ReviewController(productId: productId));
+    final reviewController = Get.put(ReviewController());
+    reviewController.getAllReviews(productId);
+
     return Scaffold(
       // APPBAR
       appBar: const TAppBar(
