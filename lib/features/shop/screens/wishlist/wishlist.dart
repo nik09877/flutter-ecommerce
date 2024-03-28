@@ -3,7 +3,7 @@ import 'package:e_mart/common/widgets/icons/circular_icon.dart';
 import 'package:e_mart/common/widgets/layouts/grid_layout.dart';
 import 'package:e_mart/common/widgets/product_cards/product_card_vertical.dart';
 import 'package:e_mart/features/shop/controllers/wishlist_controller.dart';
-import 'package:e_mart/features/shop/screens/home/home.dart';
+import 'package:e_mart/features/shop/screens/all_products/all_products.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +23,7 @@ class FavouriteScreen extends StatelessWidget {
           actions: [
             TCircularIcon(
               icon: Iconsax.add,
-              onPressed: () => Get.to(const HomeScreen()),
+              onPressed: () => Get.to(const AllProducts()),
             )
           ],
         ),

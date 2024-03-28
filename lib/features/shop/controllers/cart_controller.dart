@@ -1,5 +1,6 @@
 import 'package:e_mart/common/widgets/loaders/circular_loader.dart';
 import 'package:e_mart/common/widgets/success_screen/success_screen.dart';
+import 'package:e_mart/features/personalization/controllers/address_controller.dart';
 import 'package:e_mart/features/shop/controllers/order_controller.dart';
 import 'package:e_mart/features/shop/controllers/product_controller.dart';
 import 'package:e_mart/features/shop/models/cart_item_model.dart';
@@ -22,6 +23,7 @@ class CartController extends GetxController {
   final productController = Get.put(ProductController());
   final userId = supabase.auth.currentUser!.id;
   final orderController = Get.put(OrderController());
+  final addressController = Get.put(AddressController());
 
   @override
   void onInit() {
@@ -125,6 +127,12 @@ class CartController extends GetxController {
 
   Future checkout() async {
     try {
+      if (addressController.selectedAddressId.value == 0) {
+        TLoaders.errorSnackBar(
+            title: "Oh Snap!", message: 'Kindly select a shipping address');
+        return;
+      }
+
       //Start Loading
       TFullScreenLoader.openLoadingDialog(
           'We are processing your order', TImages.docerAnimation);

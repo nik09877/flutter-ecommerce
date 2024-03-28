@@ -73,83 +73,86 @@ class SettingScreens extends StatelessWidget {
                       subTitle: 'In-progress and Completed Orders',
                       onTap: () => Get.to(() => const OrderScreen()),
                     ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.bank,
-                      title: 'Bank Account',
-                      subTitle: 'Withdraw balance to registered bank account',
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.discount_shape,
-                      title: 'My Coupons',
-                      subTitle: 'List of all the discounted coupons',
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.notification,
-                      title: 'Notifications',
-                      subTitle: 'Set any kind of notification message',
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.security_card,
-                      title: 'Account Privacy',
-                      subTitle: 'Manage data usage and connected accounts',
-                      onTap: () {},
-                    ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.bank,
+                    //   title: 'Bank Account',
+                    //   subTitle: 'Withdraw balance to registered bank account',
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.discount_shape,
+                    //   title: 'My Coupons',
+                    //   subTitle: 'List of all the discounted coupons',
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.notification,
+                    //   title: 'Notifications',
+                    //   subTitle: 'Set any kind of notification message',
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.security_card,
+                    //   title: 'Account Privacy',
+                    //   subTitle: 'Manage data usage and connected accounts',
+                    //   onTap: () {},
+                    // ),
 
                     //APP SETTINGS
-                    const SizedBox(height: TSizes.spaceBtwSections),
-                    const TSectionHeading(
-                      title: 'App Settings',
-                      showActionButton: false,
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwItems),
-                    TSettingsMenuTile(
-                      icon: Iconsax.document_upload,
-                      title: 'Load Data',
-                      subTitle: 'Upload Data to your Cloud Database',
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.location,
-                      title: 'Geolocation',
-                      subTitle: 'Set recommendation based on location',
-                      trailing: Switch(
-                        value: true,
-                        onChanged: (value) {},
-                      ),
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.security_user,
-                      title: 'Safe Mode',
-                      subTitle: 'Search result is safe for all ages',
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                      onTap: () {},
-                    ),
-                    TSettingsMenuTile(
-                      icon: Iconsax.image,
-                      title: 'HD Image Quality',
-                      subTitle: 'Set image quality to be seen',
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                      onTap: () {},
-                    ),
+                    // const SizedBox(height: TSizes.spaceBtwSections),
+                    // const TSectionHeading(
+                    //   title: 'App Settings',
+                    //   showActionButton: false,
+                    // ),
+                    // const SizedBox(height: TSizes.spaceBtwItems),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.document_upload,
+                    //   title: 'Load Data',
+                    //   subTitle: 'Upload Data to your Cloud Database',
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.location,
+                    //   title: 'Geolocation',
+                    //   subTitle: 'Set recommendation based on location',
+                    //   trailing: Switch(
+                    //     value: true,
+                    //     onChanged: (value) {},
+                    //   ),
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.security_user,
+                    //   title: 'Safe Mode',
+                    //   subTitle: 'Search result is safe for all ages',
+                    //   trailing: Switch(
+                    //     value: false,
+                    //     onChanged: (value) {
+                    //       value = value;
+                    //     },
+                    //   ),
+                    //   onTap: () {},
+                    // ),
+                    // TSettingsMenuTile(
+                    //   icon: Iconsax.image,
+                    //   title: 'HD Image Quality',
+                    //   subTitle: 'Set image quality to be seen',
+                    //   trailing: Switch(
+                    //     value: false,
+                    //     onChanged: (value) {},
+                    //   ),
+                    //   onTap: () {},
+                    // ),
 
                     //Logout
                     const SizedBox(height: TSizes.spaceBtwSections),
+
                     SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
-                            onPressed: controller.logOut,
+                            onPressed: () => controller.logOut(),
                             child: const Text('Logout'))),
-                    const SizedBox(height: TSizes.spaceBtwSections),
+                    // const SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ))
           ],

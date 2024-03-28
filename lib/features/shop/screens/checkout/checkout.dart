@@ -1,13 +1,18 @@
 import 'package:e_mart/common/widgets/appbar/appbar.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
+import 'package:e_mart/features/personalization/controllers/address_controller.dart';
+import 'package:e_mart/features/personalization/screens/address/add_new_address.dart';
+import 'package:e_mart/features/personalization/screens/address/address.dart';
 import 'package:e_mart/features/shop/controllers/cart_controller.dart';
 import 'package:e_mart/features/shop/screens/cart/cart.dart';
 import 'package:e_mart/utils/constants/colors.dart';
 import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
+import 'package:e_mart/utils/formatters/formatter.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -134,41 +139,93 @@ class TBillingAddressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final addrController = Get.put(AddressController());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TSectionHeading(
-            title: 'Shipping Address', buttonTitle: 'Change', onPressed: () {}),
-        Text('Nikhil Mishra', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 2,
+        Obx(
+          () => TSectionHeading(
+              title: 'Shipping Address',
+              buttonTitle: addrController.selectedAddressId.value != 0
+                  ? 'Change'
+                  : 'Add',
+              onPressed: () {
+                addrController.selectedAddressId.value != 0
+                    ? Get.to(() => const AddressScreen())
+                    : Get.to(() => const AddNewAddress());
+              }),
         ),
-        Row(
-          children: [
-            const Icon(Icons.phone, color: Colors.grey, size: 16),
-            const SizedBox(
-              width: TSizes.spaceBtwItems,
-            ),
-            Text('(+91)-798-123-5643',
-                style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems / 2,
-        ),
-        Row(
-          children: [
-            const Icon(Icons.location_history, color: Colors.grey, size: 16),
-            const SizedBox(
-              width: TSizes.spaceBtwItems,
-            ),
-            Text(
-              'South Liana, Maine 87659m USA',
-              style: Theme.of(context).textTheme.bodyMedium,
-              softWrap: true,
-            ),
-          ],
-        ),
+        Obx(() {
+          if (addrController.selectedAddressId.value != 0) {
+            final name = addrController.addresses
+                .firstWhere(
+                    (addr) => addr.id == addrController.selectedAddressId.value)
+                .name;
+
+            return Text('$name', style: Theme.of(context).textTheme.bodyLarge);
+          }
+          return const SizedBox();
+        }),
+        Obx(() {
+          if (addrController.selectedAddressId.value != 0) {
+            return const SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            );
+          }
+          return const SizedBox();
+        }),
+        Obx(() {
+          if (addrController.selectedAddressId.value != 0) {
+            final phone = addrController.addresses
+                .firstWhere(
+                    (addr) => addr.id == addrController.selectedAddressId.value)
+                .phoneNumber;
+            return Row(
+              children: [
+                const Icon(Icons.phone, color: Colors.grey, size: 16),
+                const SizedBox(
+                  width: TSizes.spaceBtwItems,
+                ),
+                Text(TFormatter.formatPhoneNumber(phone!),
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            );
+          }
+          return const SizedBox();
+        }),
+        Obx(() {
+          if (addrController.selectedAddressId.value != 0) {
+            return const SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            );
+          }
+          return const SizedBox();
+        }),
+        Obx(() {
+          if (addrController.selectedAddressId.value != 0) {
+            final address = addrController.addresses.firstWhere(
+                (addr) => addr.id == addrController.selectedAddressId.value);
+
+            return Row(
+              children: [
+                const Icon(Icons.location_history,
+                    color: Colors.grey, size: 16),
+                const SizedBox(
+                  width: TSizes.spaceBtwItems,
+                ),
+                Expanded(
+                  child: Text(
+                    '${address.street}, ${address.postalCode}, ${address.district}, ${address.state}, India',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            );
+          }
+          return const SizedBox();
+        }),
       ],
     );
   }
@@ -192,10 +249,10 @@ class TBillingPaymentSection extends StatelessWidget {
             backgroundColor: dark ? TColors.light : TColors.white,
             padding: const EdgeInsets.all(TSizes.sm),
             child: const Image(
-                image: AssetImage(TImages.paypal), fit: BoxFit.contain),
+                image: AssetImage(TImages.paytm), fit: BoxFit.contain),
           ), // TRoundedContainer
           const SizedBox(width: TSizes.spaceBtwItems / 2),
-          Text('Paypal', style: Theme.of(context).textTheme.bodyLarge),
+          Text('Paytm', style: Theme.of(context).textTheme.bodyLarge),
         ],
       )
     ]);

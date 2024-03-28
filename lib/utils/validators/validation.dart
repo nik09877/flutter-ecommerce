@@ -66,4 +66,69 @@ class TValidator {
   }
 
 // Add more custom validators as needed for your specific requirements.
+
+  static List<String> validIndianStates = [
+    // States
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jammu and Kashmir',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+
+    // Union Territories
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli and Daman and Diu',
+    'Delhi',
+    'Ladakh',
+    'Lakshadweep',
+    'Puducherry',
+  ];
+
+  static String? validateState(String? value) {
+    if (value == null || value.isEmpty) return 'State is required';
+
+    final lowerCaseValue = value.trim().toLowerCase();
+    if (!validIndianStates
+        .map((state) => state.toLowerCase())
+        .contains(lowerCaseValue)) {
+      return 'Invalid Indian State';
+    }
+    return null; // Return null if validation passes
+  }
+
+  static String? validatePostalCode(String? value) {
+    // Indian postal code format: 6 digits
+    if (value == null || value.isEmpty) {
+      return 'Postal code is required';
+    }
+    if (!RegExp(r'^[1-9][0-9]{5}$').hasMatch(value)) {
+      return 'Invalid Indian postal code';
+    }
+    return null; // Return null if validation passes
+  }
 }

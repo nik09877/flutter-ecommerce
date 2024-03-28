@@ -1,6 +1,9 @@
 import 'package:e_mart/common/widgets/appbar/appbar.dart';
+import 'package:e_mart/features/personalization/controllers/address_controller.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
+import 'package:e_mart/utils/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AddNewAddress extends StatelessWidget {
@@ -8,6 +11,8 @@ class AddNewAddress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final addrController = Get.put(AddressController());
+
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,
@@ -17,14 +22,21 @@ class AddNewAddress extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Form(
+                key: addrController.addrFormKey,
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: addrController.name,
+                      validator: (value) =>
+                          TValidator.validateEmptyText('Name', value),
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Iconsax.user), labelText: 'Name'),
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
                     TextFormField(
+                      validator: (value) =>
+                          TValidator.validatePhoneNumber(value),
+                      controller: addrController.phone,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Iconsax.mobile),
                           labelText: 'Phone Number'),
@@ -34,6 +46,9 @@ class AddNewAddress extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            validator: (value) =>
+                                TValidator.validateEmptyText('Street', value),
+                            controller: addrController.street,
                             decoration: const InputDecoration(
                                 prefixIcon: Icon(Iconsax.building_31),
                                 labelText: 'Street'),
@@ -44,6 +59,9 @@ class AddNewAddress extends StatelessWidget {
                         ),
                         Expanded(
                           child: TextFormField(
+                            validator: (value) =>
+                                TValidator.validatePostalCode(value),
+                            controller: addrController.postal,
                             decoration: const InputDecoration(
                                 prefixIcon: Icon(Iconsax.code),
                                 labelText: 'Postal Code'),
@@ -58,9 +76,12 @@ class AddNewAddress extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            validator: (value) =>
+                                TValidator.validateEmptyText('District', value),
+                            controller: addrController.district,
                             decoration: const InputDecoration(
                                 prefixIcon: Icon(Iconsax.building),
-                                labelText: 'City'),
+                                labelText: 'District'),
                           ),
                         ),
                         const SizedBox(
@@ -68,6 +89,9 @@ class AddNewAddress extends StatelessWidget {
                         ),
                         Expanded(
                           child: TextFormField(
+                            validator: (value) =>
+                                TValidator.validateState(value),
+                            controller: addrController.state,
                             decoration: const InputDecoration(
                                 prefixIcon: Icon(Iconsax.activity),
                                 labelText: 'State'),
@@ -75,21 +99,24 @@ class AddNewAddress extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: TSizes.spaceBtwInputFields,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Iconsax.global),
-                          labelText: 'Country'),
-                    ),
+                    // const SizedBox(
+                    //   height: TSizes.spaceBtwInputFields,
+                    // ),
+                    // TextFormField(
+                    //   decoration: const InputDecoration(
+                    //       prefixIcon: Icon(Iconsax.global),
+                    //       labelText: 'Country'),
+                    // ),
                     const SizedBox(
                       height: TSizes.defaultSpace,
                     ),
                     SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            onPressed: () {}, child: const Text('Save'))),
+                            onPressed: () {
+                              addrController.addNewAddress();
+                            },
+                            child: const Text('Save'))),
                   ],
                 ),
               ))),
