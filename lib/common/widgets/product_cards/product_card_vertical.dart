@@ -9,7 +9,6 @@ import 'package:e_mart/features/shop/controllers/wishlist_controller.dart';
 import 'package:e_mart/features/shop/models/product_model.dart';
 import 'package:e_mart/features/shop/screens/product_details/product_details.dart';
 import 'package:e_mart/utils/constants/colors.dart';
-import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +46,9 @@ class TProductCardVertical extends StatelessWidget {
               child: Stack(
                 children: [
                   TRoundedImage(
-                    imageUrl: product.image ?? TImages.productImage1,
+                    imageUrl: product.image!,
                     applyImageRadius: true,
-                    isNetworkImage: true,
+                    // isNetworkImage: true,
                     width: double.infinity,
                     height: double.infinity,
                   ),

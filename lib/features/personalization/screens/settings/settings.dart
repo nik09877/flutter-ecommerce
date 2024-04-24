@@ -20,6 +20,7 @@ class SettingScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
+    // final controller = LoginController.instance;
 
     return Scaffold(
       body: SingleChildScrollView(

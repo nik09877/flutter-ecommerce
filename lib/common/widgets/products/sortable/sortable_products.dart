@@ -1,4 +1,3 @@
-import 'package:e_mart/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:e_mart/common/widgets/layouts/grid_layout.dart';
 import 'package:e_mart/common/widgets/product_cards/product_card_vertical.dart';
 import 'package:e_mart/features/shop/controllers/product_controller.dart';
@@ -19,12 +18,23 @@ class TSortableProducts extends StatelessWidget {
     return Obx(
       () => Column(
         children: [
-          const TSearchContainer(
-            text: 'Search in Store',
-            showBorder: true,
-            showBackground: false,
-            padding: EdgeInsets.zero,
-            showSearchField: true,
+          // const TSearchContainer(
+          //   text: 'Search in Store',
+          //   showBorder: true,
+          //   showBackground: false,
+          //   padding: EdgeInsets.zero,
+          //   showSearchField: true,
+          // ),
+          TextFormField(
+            expands: false,
+            controller: productController.search,
+            decoration: const InputDecoration(
+                prefixIcon: Icon(Iconsax.search_normal_1),
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'Search in Store'),
+            onChanged: (value) {
+              productController.filterProducts();
+            },
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,

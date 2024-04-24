@@ -78,16 +78,17 @@ class SignupController extends GetxController {
 
       //Show Success Message
       TFullScreenLoader.stopLoadind();
-      TLoaders.successSnackBar(
-          title: 'Congratulations', message: 'Your account has been created!');
+      // TLoaders.successSnackBar(
+      //     title: 'Congratulations', message: 'Your account has been created!');
+      Get.to(() => const LoginScreen());
 
       //Move to Success Screen
-      Get.to(() => SuccessScreen(
-            title: TTexts.yourAccountCreatedTitle,
-            subTitle: TTexts.yourAccountCreatedSubTitle,
-            image: TImages.staticSuccessIllustration,
-            onPressed: () => Get.to(() => const LoginScreen()),
-          ));
+      // Get.to(() => SuccessScreen(
+      //       title: TTexts.yourAccountCreatedTitle,
+      //       subTitle: TTexts.yourAccountCreatedSubTitle,
+      //       image: TImages.staticSuccessIllustration,
+      //       onPressed: () => Get.to(() => const LoginScreen()),
+      //     ));
     } catch (e) {
       TFullScreenLoader.stopLoadind();
 

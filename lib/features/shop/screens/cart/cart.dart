@@ -77,8 +77,12 @@ class TCartItems extends StatelessWidget {
                     ],
                   ),
                   TProductPriceText(
-                      price:
-                          '${((cartController.cartCount.value != -1 ? cartController.productCountInCart(cartController.cart[index].product.id!) : 0)) * cartController.cart[index].product.price!}'),
+                      price: (((cartController.cartCount.value != -1
+                                  ? cartController.productCountInCart(
+                                      cartController.cart[index].product.id!)
+                                  : 0)) *
+                              cartController.cart[index].product.price!)
+                          .toStringAsFixed(2)),
                 ],
               ),
           ],

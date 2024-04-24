@@ -3,7 +3,6 @@ import 'package:e_mart/common/widgets/text/brand_title_text_with_verified_icon.d
 import 'package:e_mart/common/widgets/text/product_title_text.dart';
 import 'package:e_mart/features/shop/models/product_model.dart';
 import 'package:e_mart/utils/constants/colors.dart';
-import 'package:e_mart/utils/constants/image_strings.dart';
 import 'package:e_mart/utils/constants/sizes.dart';
 import 'package:e_mart/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,7 @@ class TCartItem extends StatelessWidget {
     return Row(children: [
       //Image
       TRoundedImage(
-        isNetworkImage: true,
-        imageUrl: product.image ?? TImages.productImage1,
+        imageUrl: product.image!,
         fit: BoxFit.fill,
         width: 60,
         height: 60,

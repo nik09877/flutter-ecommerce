@@ -153,7 +153,7 @@ class TSignupForm extends StatelessWidget {
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                    onPressed: controller.signup,
+                    onPressed: () => controller.signup(),
                     child: const Text(TTexts.createAccount)))
           ],
         ));
