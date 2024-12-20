@@ -80,6 +80,8 @@ class CartController extends GetxController {
       calcCartPrice();
       await supabase.from('Cart').upsert(
           {'userId': userId, 'productId': prod.id, 'count': cntofProd + 1});
+      TLoaders.successSnackBar(
+          title: "Yoohoo!", message: "Product added to Cart");
     } catch (e) {
       TLoaders.errorSnackBar(title: "Oh Snap!", message: e.toString());
     }

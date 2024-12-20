@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:e_mart/common/widgets/custom_shapes/containers/search_container.dart';
+import 'package:e_mart/common/widgets/drawer/custom_drawer.dart';
 import 'package:e_mart/common/widgets/image_text_widgets/vertical_image_text.dart';
 import 'package:e_mart/common/widgets/images/rounded_image.dart';
 import 'package:e_mart/common/widgets/layouts/grid_layout.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends StatelessWidget {
     // Get.put(CartController());
 
     return Scaffold(
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [

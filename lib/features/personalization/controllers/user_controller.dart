@@ -37,7 +37,7 @@ class UserController extends GetxController {
           email: user?.email ?? '',
           phoneNumber: user?.phone ?? '',
           profilePicture: profileImageUrl);
-      userRepo.saveUser(newUser);
+      await userRepo.saveUser(newUser);
     } catch (e) {
       TLoaders.warningSnackBar(
           title: 'Data not saved',

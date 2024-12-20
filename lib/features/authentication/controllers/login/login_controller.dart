@@ -28,35 +28,35 @@ class LoginController extends GetxController {
   final userController = Get.put(UserController());
   var authSubscription;
 
-  @override
-  void onInit() {
-    authSubscription =
-        supabase.auth.onAuthStateChange.listen((AuthState data) async {
-      final AuthChangeEvent event = data.event;
-      if (event == AuthChangeEvent.signedIn) {
-        try {
-          //Store data in supabase
-          final Session? session = data.session;
-          final User? user = session?.user;
-          await userController.saveUserRecord(user);
-          TFullScreenLoader.stopLoadind();
+  // @override
+  // void onInit() {
+  //   authSubscription =
+  //       supabase.auth.onAuthStateChange.listen((AuthState data) async {
+  //     final AuthChangeEvent event = data.event;
+  //     if (event == AuthChangeEvent.signedIn) {
+  //       try {
+  //         //Store data in supabase
+  //         final Session? session = data.session;
+  //         final User? user = session?.user;
+  //         await userController.saveUserRecord(user);
+  //         TFullScreenLoader.stopLoadind();
 
-          //Move to HomePage
-          Get.offAll(() => const NavigationMenu());
-        } catch (e) {
-          TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-        }
-      }
-    });
+  //         //Move to HomePage
+  //         Get.offAll(() => const NavigationMenu());
+  //       } catch (e) {
+  //         TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+  //       }
+  //     }
+  //   });
 
-    super.onInit();
-  }
+  //   super.onInit();
+  // }
 
-  @override
-  void dispose() {
-    authSubscription.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   authSubscription.cancel();
+  //   super.dispose();
+  // }
 
   void login() async {
     try {
@@ -88,17 +88,14 @@ class LoginController extends GetxController {
         // localStorage.write('REMEMBER_ME_EMAIL', email.text.trim());
         // localStorage.write('REMEMBER_ME_PASSWORD', password.text.trim());
       }
+      TFullScreenLoader.stopLoadind();
+      //Show Success Message
       TLoaders.successSnackBar(
           title: 'Congratulations',
           message: 'You have successfully logged in!');
-      //Show Success Message
-      // TFullScreenLoader.stopLoadind();
-      // TLoaders.successSnackBar(
-      //     title: 'Congratulations',
-      //     message: 'You have successfully logged in!');
 
       //Move to HomePage
-      // Get.offAll(() => const NavigationMenu());
+      Get.offAll(() => const NavigationMenu());
     } catch (e) {
       TFullScreenLoader.stopLoadind();
 
@@ -128,12 +125,12 @@ class LoginController extends GetxController {
     }
   }
 
-  void logOut() async {
-    try {
-      await AuthenticationRepository.instance.logout();
-      Get.offAll(() => const LoginScreen());
-    } catch (e) {
-      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-    }
-  }
+  // void logOut() async {
+  //   try {
+  //     await AuthenticationRepository.instance.logout();
+  //     Get.offAll(() => const LoginScreen());
+  //   } catch (e) {
+  //     TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+  //   }
+  // }
 }

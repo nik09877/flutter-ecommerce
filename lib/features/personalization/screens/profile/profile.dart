@@ -15,7 +15,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = UserController.instance;
+    // final controller = UserController.instance;
+    final controller = Get.put(UserController());
 
     return Scaffold(
         appBar: const TAppBar(showBackArrow: true, title: Text('Profile')),
@@ -58,14 +59,14 @@ class ProfileScreen extends StatelessWidget {
                     () => TProfileMenu(
                       title: 'Name',
                       value: controller.user.value.fullName,
-                      onPressed: () {},
+                      onPressed: () => Get.to(() => const UpdateProfile()),
                     ),
                   ),
                   Obx(
                     () => TProfileMenu(
                       title: 'Username',
                       value: controller.user.value.username ?? "",
-                      onPressed: () {},
+                      onPressed: () => Get.to(() => const UpdateProfile()),
                     ),
                   ),
 
@@ -86,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
                     () => TProfileMenu(
                         title: 'E-mail',
                         value: controller.user.value.email ?? "",
-                        onPressed: () {}),
+                        onPressed: () => Get.to(() => const UpdateProfile())),
                   ),
 
                   Obx(
@@ -96,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                             ? TFormatter.formatPhoneNumber(
                                 controller.user.value.phoneNumber!)
                             : "",
-                        onPressed: () {}),
+                        onPressed: () => Get.to(() => const UpdateProfile())),
                   ),
                   // TProfileMenu(
                   //     title: 'Gender', value: 'Male', onPressed: () {}),

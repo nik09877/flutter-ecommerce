@@ -74,21 +74,21 @@ class SignupController extends GetxController {
           phoneNumber: phone.text.trim(),
           profilePicture: '');
       final userRepo = Get.put(UserRepository());
-      userRepo.saveUser(newUser);
+      await userRepo.saveUser(newUser);
 
       //Show Success Message
       TFullScreenLoader.stopLoadind();
-      // TLoaders.successSnackBar(
-      //     title: 'Congratulations', message: 'Your account has been created!');
-      Get.to(() => const LoginScreen());
+      TLoaders.successSnackBar(
+          title: 'Congratulations', message: 'Your account has been created!');
+      // Get.to(() => const LoginScreen());
 
-      //Move to Success Screen
-      // Get.to(() => SuccessScreen(
-      //       title: TTexts.yourAccountCreatedTitle,
-      //       subTitle: TTexts.yourAccountCreatedSubTitle,
-      //       image: TImages.staticSuccessIllustration,
-      //       onPressed: () => Get.to(() => const LoginScreen()),
-      //     ));
+      // Move to Success Screen
+      Get.to(() => SuccessScreen(
+            title: TTexts.yourAccountCreatedTitle,
+            subTitle: TTexts.yourAccountCreatedSubTitle,
+            image: TImages.staticSuccessIllustration,
+            onPressed: () => Get.to(() => const LoginScreen()),
+          ));
     } catch (e) {
       TFullScreenLoader.stopLoadind();
 

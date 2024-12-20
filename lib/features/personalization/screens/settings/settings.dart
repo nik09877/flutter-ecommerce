@@ -3,7 +3,7 @@ import 'package:e_mart/common/widgets/custom_shapes/containers/primary_header_co
 import 'package:e_mart/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:e_mart/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:e_mart/common/widgets/text/section_heading.dart';
-import 'package:e_mart/features/authentication/controllers/login/login_controller.dart';
+import 'package:e_mart/features/authentication/controllers/logout/logout_controller.dart';
 import 'package:e_mart/features/personalization/screens/address/address.dart';
 import 'package:e_mart/features/personalization/screens/profile/profile.dart';
 import 'package:e_mart/features/shop/screens/cart/cart.dart';
@@ -19,7 +19,7 @@ class SettingScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
+    final controller = Get.put(LogoutController());
     // final controller = LoginController.instance;
 
     return Scaffold(
@@ -153,7 +153,7 @@ class SettingScreens extends StatelessWidget {
                         child: OutlinedButton(
                             onPressed: () => controller.logOut(),
                             child: const Text('Logout'))),
-                    // const SizedBox(height: TSizes.spaceBtwSections),
+                    const SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ))
           ],

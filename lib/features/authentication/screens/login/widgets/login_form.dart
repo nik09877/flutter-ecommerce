@@ -31,23 +31,27 @@ class TLoginForm extends StatelessWidget {
                 decoration: const InputDecoration(
                     prefixIcon: Icon(Iconsax.direct_right),
                     labelText: TTexts.email),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
               Obx(
                 () => TextFormField(
-                    validator: (value) => TValidator.validatePassword(value),
-                    controller: controller.password,
-                    obscureText: controller.showPassword.value,
-                    decoration: InputDecoration(
-                      labelText: TTexts.password,
-                      prefixIcon: const Icon(Iconsax.password_check),
-                      suffixIcon: IconButton(
-                          onPressed: () => controller.showPassword.value =
-                              !controller.showPassword.value,
-                          icon: Icon(controller.showPassword.value
-                              ? Iconsax.eye
-                              : Iconsax.eye_slash)),
-                    )),
+                  validator: (value) => TValidator.validatePassword(value),
+                  controller: controller.password,
+                  obscureText:
+                      controller.showPassword.value == false ? true : false,
+                  decoration: InputDecoration(
+                    labelText: TTexts.password,
+                    prefixIcon: const Icon(Iconsax.password_check),
+                    suffixIcon: IconButton(
+                        onPressed: () => controller.showPassword.value =
+                            !controller.showPassword.value,
+                        icon: Icon(controller.showPassword.value
+                            ? Iconsax.eye_slash
+                            : Iconsax.eye)),
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields / 2),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
